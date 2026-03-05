@@ -11,17 +11,17 @@
     "logic_pro": {
       "cpu_mean": 30.0,
       "cpu_std": 3.0,
-      "memory_mean": 880.0,
+      "memory_mean": 400.0,
       "memory_std": 25.0,
-      "execution_time_mean": 4.5,
+      "execution_time_mean": 1.5,
       "execution_time_std": 0.2
     },
     "xcode": {
       "cpu_mean": 55.0,
       "cpu_std": 5.0,
-      "memory_mean": 2300.0,
+      "memory_mean": 1200.0,
       "memory_std": 80.0,
-      "execution_time_mean": 8.2,
+      "execution_time_mean": 4.8,
       "execution_time_std": 0.5
     }
   }
