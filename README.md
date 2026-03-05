@@ -4,41 +4,36 @@ Automated performance regression detection platform that simulates a DevOps perf
 
 ## Architecture
 
-```mermaid
-graph TD
-    subgraph Frontend
-        A["<b>React Dashboard</b><br/><i>localhost:5173</i><br/>Per-app tabs · Workflow controls<br/>Embedded Grafana · Regression table"]
-    end
-
-    subgraph Backend
-        B["<b>FastAPI Backend</b><br/><i>localhost:8001</i><br/>Simulate · Pipeline<br/>Metrics · Regressions"]
-    end
-
-    subgraph Repos["Mock GitHub Repos"]
-        C1[mock_final_cut]
-        C2[mock_logic_pro]
-        C3[mock_xcode]
-    end
-
-    subgraph CI["GitHub Actions CI"]
-        D["run_benchmarks.py<br/>Per-repo benchmark workflows"]
-    end
-
-    subgraph Storage
-        E[("InfluxDB Cloud<br/><i>performance_metrics</i><br/><i>regression_events</i>")]
-    end
-
-    subgraph Visualization
-        F["<b>Grafana OSS</b><br/><i>localhost:3000</i><br/>3 per-app dashboards<br/>Embedded via iframe"]
-    end
-
-    A -- "REST API" --> B
-    B -- "git push" --> Repos
-    Repos -- "push triggers" --> CI
-    CI -- "write metrics" --> E
-    B -- "InfluxDB client" --> E
-    E -- "Flux queries" --> F
-    F -- "iframe embed" --> A
+```
+┌─────────────────────────┐
+│   React Dashboard       │  localhost:5173
+│   Per-app tabs with     │
+│   workflow controls,    │
+│   embedded Grafana,     │
+│   regression table      │
+└──────────┬──────────────┘
+           │ REST API
+           ▼
+┌─────────────────────────┐     ┌──────────────────────────┐
+│   FastAPI Backend       │────▶│   Mock GitHub Repos      │
+│   localhost:8001        │     │   mock_final_cut         │
+│   Simulate, pipeline,   │     │   mock_logic_pro         │
+│   metrics, regressions  │     │   mock_xcode             │
+└──────────┬──────────────┘     └──────────┬───────────────┘
+           │ InfluxDB client               │ git push triggers
+           ▼                               ▼
+┌─────────────────────────┐     ┌──────────────────────────┐
+│   InfluxDB Cloud        │     │   GitHub Actions CI      │
+│   performance_metrics   │◀────│   run_benchmarks.py      │
+│   regression_events     │     │   Per-repo benchmark     │
+└──────────┬──────────────┘     └──────────────────────────┘
+           │ Flux queries
+           ▼
+┌─────────────────────────┐
+│   Grafana OSS (Docker)  │  localhost:3000
+│   3 per-app dashboards  │
+│   Embedded via iframe   │
+└─────────────────────────┘
 ```
 
 ## Tech Stack
@@ -158,48 +153,22 @@ Each application has three workflows with distinct performance profiles:
 
 ### Commit & Push Flow
 
-```mermaid
-sequenceDiagram
-    actor Engineer
-    participant UI as React Dashboard
-    participant API as FastAPI Backend
-    participant Repo as Mock GitHub Repo
-    participant CI as GitHub Actions
-    participant DB as InfluxDB Cloud
-    participant Graf as Grafana
-
-    Engineer->>UI: Adjust metric sliders & enter commit message
-    UI->>API: POST /api/pipeline
-    API->>Repo: Write benchmark_config.json
-    API->>Repo: git add, commit, push
-    Repo-->>CI: Push triggers workflow
-    CI->>CI: run_benchmarks.py
-    CI->>DB: Write performance_metrics
-    CI->>CI: Z-score regression detection
-    CI->>DB: Write regression_events (if any)
-    CI-->>Repo: Exit code 1 if regression detected
-    DB-->>Graf: Flux queries (auto-refresh)
-    Graf-->>UI: Embedded iframe updates
-    UI-->>Engineer: Regression table refreshes
-```
+1. Adjust workflow metric sliders (CPU mean, Memory mean, Execution Time mean)
+2. Enter a commit message
+3. Click "Commit & Push"
+4. The backend writes `benchmark_config.json` to the app's mock repo, commits, and pushes
+5. GitHub Actions CI runs `run_benchmarks.py` in the mock repo
+6. Benchmarks simulate metrics (std = 10% of mean), write to InfluxDB, and run regression detection
+7. Grafana dashboards update in real time
 
 ### Regression Detection
 
 Uses **z-score statistical analysis** with a sliding window:
-
-```mermaid
-graph LR
-    A["New metric<br/>data point"] --> B{"Baseline ≥ 5<br/>data points?"}
-    B -- No --> C["Skip detection"]
-    B -- Yes --> D["Compute z-score against<br/>last 20 data points"]
-    D --> E{"|z| > 3.0?"}
-    E -- Yes --> F["🔴 <b>Strong</b> regression"]
-    E -- No --> G{"|z| > 2.0?"}
-    G -- Yes --> H["🟠 <b>Possible</b> regression"]
-    G -- No --> I["✅ No regression"]
-    F --> J["Write to InfluxDB<br/><i>regression_events</i>"]
-    H --> J
-```
+- Baseline: last 20 data points per workflow
+- Minimum 5 data points required
+- |z| > 2.0: **possible** regression
+- |z| > 3.0: **strong** regression
+- Detected regressions are written to InfluxDB as `regression_events`
 
 ## Mock Repositories
 
