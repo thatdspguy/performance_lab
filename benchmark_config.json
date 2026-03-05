@@ -1,26 +1,26 @@
 {
   "apps": {
     "final_cut": {
-      "cpu_mean": 45,
-      "cpu_std": 4,
-      "memory_mean": 800,
-      "memory_std": 50,
+      "cpu_mean": 45.0,
+      "cpu_std": 4.0,
+      "memory_mean": 800.0,
+      "memory_std": 50.0,
       "execution_time_mean": 2.5,
       "execution_time_std": 0.3
     },
     "logic_pro": {
-      "cpu_mean": 30,
-      "cpu_std": 3,
-      "memory_mean": 400,
-      "memory_std": 25,
+      "cpu_mean": 30.0,
+      "cpu_std": 3.0,
+      "memory_mean": 400.0,
+      "memory_std": 25.0,
       "execution_time_mean": 1.5,
       "execution_time_std": 0.2
     },
     "xcode": {
-      "cpu_mean": 55,
-      "cpu_std": 5,
-      "memory_mean": 1200,
-      "memory_std": 80,
+      "cpu_mean": 55.0,
+      "cpu_std": 5.0,
+      "memory_mean": 1200.0,
+      "memory_std": 80.0,
       "execution_time_mean": 4.0,
       "execution_time_std": 0.5
     }
