@@ -1,0 +1,56 @@
+name: Benchmark Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Validate benchmark config
+        run: |
+          python -c "
+          import json, sys
+          with open('benchmark_config.json') as f:
+              config = json.load(f)
+          apps = config.get('apps', {})
+          if not apps:
+              print('Error: no apps in config', file=sys.stderr)
+              sys.exit(1)
+          required = ['cpu_mean','cpu_std','memory_mean','memory_std','execution_time_mean','execution_time_std']
+          for slug, params in apps.items():
+              for key in required:
+                  if key not in params:
+                      print(f'Error: {slug} missing {key}', file=sys.stderr)
+                      sys.exit(1)
+          print(f'Config valid: {len(apps)} app(s)')
+          "
+
+      - name: Run benchmark simulation
+        env:
+          INFLUXDB_URL: ${{ secrets.INFLUXDB_URL }}
+          INFLUXDB_TOKEN: ${{ secrets.INFLUXDB_TOKEN }}
+          INFLUXDB_ORG: ${{ secrets.INFLUXDB_ORG }}
+          INFLUXDB_BUCKET: ${{ secrets.INFLUXDB_BUCKET }}
+        run: uv run python -m backend.cli --config benchmark_config.json
+
+      - name: Run tests
+        run: uv run pytest

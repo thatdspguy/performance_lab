@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+
+# uv
+uv.lock
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Environment
+.env
+
+# Docker volumes
+grafana-data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

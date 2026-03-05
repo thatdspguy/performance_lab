@@ -1,0 +1,22 @@
+[project]
+name = "performance-lab"
+version = "0.1.0"
+description = "Automated Performance Regression Detection Platform"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "influxdb-client",
+    "pydantic",
+    "pydantic-settings",
+    "numpy",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "httpx",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
