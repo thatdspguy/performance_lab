@@ -3,14 +3,41 @@ from __future__ import annotations
 from pydantic import BaseModel
 
 
-class SimulateRequest(BaseModel):
-    application: str
+class WorkflowConfig(BaseModel):
+    """Per-workflow benchmark parameters (means only, std auto-computed)."""
+
     cpu_mean: float
-    cpu_std: float
     memory_mean: float
-    memory_std: float
     execution_time_mean: float
-    execution_time_std: float
+
+
+class WorkflowInfo(BaseModel):
+    """Workflow definition returned by the API."""
+
+    name: str
+    slug: str
+    cpu_mean: float
+    memory_mean: float
+    execution_time_mean: float
+
+
+class AppInfo(BaseModel):
+    """Application definition returned by the API."""
+
+    name: str
+    slug: str
+    repo_url: str
+    workflows: list[WorkflowInfo]
+
+
+class SimulateRequest(BaseModel):
+    """Request body for simulating a single workflow run."""
+
+    application: str
+    workflow: str
+    cpu_mean: float
+    memory_mean: float
+    execution_time_mean: float
 
 
 class MetricsResult(BaseModel):
@@ -32,24 +59,15 @@ class SimulateResponse(BaseModel):
     commit_id: str
     commit_number: int
     application: str
+    workflow: str
     metrics: MetricsResult
     regressions: list[RegressionInfo]
-
-
-class AppInfo(BaseModel):
-    name: str
-    slug: str
-    cpu_mean: float
-    cpu_std: float
-    memory_mean: float
-    memory_std: float
-    execution_time_mean: float
-    execution_time_std: float
 
 
 class MetricRecord(BaseModel):
     time: str
     application: str
+    workflow: str
     commit_id: str
     commit_number: int
     cpu_usage: float
@@ -60,6 +78,7 @@ class MetricRecord(BaseModel):
 class RegressionRecord(BaseModel):
     time: str
     application: str
+    workflow: str
     commit_id: str
     metric: str
     severity: str
@@ -69,32 +88,16 @@ class RegressionRecord(BaseModel):
     baseline_std: float
 
 
-class AppBenchmarkConfig(BaseModel):
-    """Per-app benchmark parameters (mean/std for each metric)."""
-
-    cpu_mean: float
-    cpu_std: float
-    memory_mean: float
-    memory_std: float
-    execution_time_mean: float
-    execution_time_std: float
-
-
-class BenchmarkConfig(BaseModel):
-    """Full benchmark config with per-app parameters."""
-
-    apps: dict[str, AppBenchmarkConfig]
-
-
 class PipelineRequest(BaseModel):
-    """Request body for the full pipeline endpoint."""
+    """Request body for committing to a mock app repo."""
 
-    apps: dict[str, AppBenchmarkConfig]
+    application: str
+    workflows: dict[str, WorkflowConfig]
     commit_message: str = "Update benchmark config"
 
 
 class PipelineResponse(BaseModel):
-    """Response from the full pipeline endpoint."""
+    """Response from the pipeline endpoint."""
 
     success: bool
     commit_id: str | None = None

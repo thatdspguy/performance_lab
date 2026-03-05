@@ -1,20 +1,18 @@
 from unittest.mock import patch
 
 from backend.git_ops import GitError
-from backend.models import AppBenchmarkConfig, PipelineRequest
-from backend.pipeline import run_full_pipeline
+from backend.models import PipelineRequest, WorkflowConfig
+from backend.pipeline import run_app_pipeline
 
 
 def _make_request() -> PipelineRequest:
     return PipelineRequest(
-        apps={
-            "final_cut": AppBenchmarkConfig(
-                cpu_mean=45,
-                cpu_std=4,
-                memory_mean=800,
-                memory_std=50,
-                execution_time_mean=2.5,
-                execution_time_std=0.3,
+        application="final_cut",
+        workflows={
+            "importing_video": WorkflowConfig(
+                cpu_mean=40,
+                memory_mean=900,
+                execution_time_mean=3.0,
             ),
         },
         commit_message="test commit",
@@ -22,10 +20,12 @@ def _make_request() -> PipelineRequest:
 
 
 @patch("backend.pipeline.commit_and_push", return_value="abc1234")
-@patch("backend.pipeline.write_benchmark_config")
-def test_run_full_pipeline_success(mock_write_config, mock_commit):
+@patch("backend.pipeline.write_workflow_config")
+@patch("backend.pipeline.get_repo_path")
+def test_run_app_pipeline_success(mock_path, mock_write_config, mock_commit, tmp_path):
+    mock_path.return_value = tmp_path
     req = _make_request()
-    success, message, commit_hash = run_full_pipeline(req)
+    success, message, commit_hash = run_app_pipeline(req)
     assert success is True
     assert commit_hash == "abc1234"
     mock_write_config.assert_called_once()
@@ -33,11 +33,13 @@ def test_run_full_pipeline_success(mock_write_config, mock_commit):
 
 
 @patch("backend.pipeline.commit_and_push")
-@patch("backend.pipeline.write_benchmark_config")
-def test_run_full_pipeline_git_error(mock_write_config, mock_commit):
+@patch("backend.pipeline.write_workflow_config")
+@patch("backend.pipeline.get_repo_path")
+def test_run_app_pipeline_git_error(mock_path, mock_write_config, mock_commit, tmp_path):
+    mock_path.return_value = tmp_path
     mock_commit.side_effect = GitError("push failed: authentication error")
     req = _make_request()
-    success, message, commit_hash = run_full_pipeline(req)
+    success, message, commit_hash = run_app_pipeline(req)
     assert success is False
     assert "push failed" in message
     assert commit_hash is None

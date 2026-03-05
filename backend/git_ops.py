@@ -1,9 +1,15 @@
-"""Git operations for the full pipeline commit mode."""
+"""Git operations for managing mock application repositories."""
 
 from __future__ import annotations
 
+import logging
 import subprocess
 from pathlib import Path
+
+from backend.apps import APP_DEFINITIONS
+from backend.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 class GitError(Exception):
@@ -42,39 +48,90 @@ def _has_staged_changes(cwd: str) -> bool:
         capture_output=True,
         timeout=30,
     )
-    # exit 0 = no diff (no staged changes), exit 1 = there are diffs
     return result.returncode != 0
 
 
-def get_repo_root() -> Path:
-    """Find the git repository root. Raises GitError if not in a repo."""
+def _get_current_branch(cwd: str) -> str:
+    """Return the name of the current branch."""
+    return _run_git("rev-parse", "--abbrev-ref", "HEAD", cwd=cwd)
+
+
+def get_performance_lab_root() -> Path:
+    """Find the performance_lab repository root."""
     output = _run_git("rev-parse", "--show-toplevel")
     return Path(output)
 
 
-def commit_and_push(file_path: str, message: str) -> str:
+def get_repos_dir() -> Path:
+    """Return the absolute path to the repos/ directory."""
+    return get_performance_lab_root() / settings.mock_repos_dir
+
+
+def clone_repo(repo_url: str, target_dir: Path) -> None:
+    """Clone a repository if it doesn't exist, or pull latest if it does."""
+    if target_dir.exists() and (target_dir / ".git").exists():
+        logger.info("Pulling latest for %s", target_dir.name)
+        _run_git("pull", cwd=str(target_dir))
+    else:
+        logger.info("Cloning %s into %s", repo_url, target_dir)
+        target_dir.parent.mkdir(parents=True, exist_ok=True)
+        _run_git("clone", repo_url, str(target_dir))
+
+
+def ensure_repos_cloned() -> dict[str, Path]:
+    """Clone or pull all mock app repos. Returns {slug: repo_path}."""
+    repos_dir = get_repos_dir()
+    repo_paths: dict[str, Path] = {}
+    for slug, app_def in APP_DEFINITIONS.items():
+        repo_name = app_def.repo_url.rstrip("/").split("/")[-1]
+        if repo_name.endswith(".git"):
+            repo_name = repo_name[:-4]
+        target = repos_dir / repo_name
+        clone_repo(app_def.repo_url, target)
+        repo_paths[slug] = target
+    return repo_paths
+
+
+def get_repo_path(app_slug: str) -> Path:
+    """Return the local path for a mock app's repository."""
+    app_def = APP_DEFINITIONS[app_slug]
+    repo_name = app_def.repo_url.rstrip("/").split("/")[-1]
+    if repo_name.endswith(".git"):
+        repo_name = repo_name[:-4]
+    return get_repos_dir() / repo_name
+
+
+def commit_and_push(file_path: str, message: str, cwd: str | None = None) -> str:
     """Stage a file, commit, and push to origin.
 
     Args:
         file_path: Path to the file to stage (relative to repo root).
         message: Commit message.
+        cwd: Working directory (repo root). If None, uses performance_lab root.
 
     Returns:
         The short commit hash of the new commit.
-
-    Raises:
-        GitError: If any git operation fails.
     """
-    repo_root = str(get_repo_root())
-    _run_git("add", file_path, cwd=repo_root)
+    if cwd is None:
+        cwd = str(get_performance_lab_root())
 
-    if not _has_staged_changes(repo_root):
+    _run_git("add", file_path, cwd=cwd)
+
+    if not _has_staged_changes(cwd):
         raise GitError(
             "No changes to commit — the benchmark config is identical "
             "to the version already committed."
         )
 
-    _run_git("commit", "-m", message, cwd=repo_root)
-    commit_hash = _run_git("rev-parse", "--short", "HEAD", cwd=repo_root)
-    _run_git("push", cwd=repo_root)
+    _run_git("commit", "-m", message, cwd=cwd)
+    commit_hash = _run_git("rev-parse", "--short", "HEAD", cwd=cwd)
+
+    branch = _get_current_branch(cwd)
+    if branch != "main":
+        raise GitError(
+            f"Pipeline requires the 'main' branch but you are on '{branch}'. "
+            "Switch to main before triggering the pipeline."
+        )
+
+    _run_git("push", cwd=cwd)
     return commit_hash

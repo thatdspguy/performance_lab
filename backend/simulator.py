@@ -5,6 +5,8 @@ import uuid
 
 import numpy as np
 
+from backend.apps import STD_FRACTION
+
 
 def generate_commit_id() -> str:
     """Generate a short simulated commit hash."""
@@ -13,21 +15,21 @@ def generate_commit_id() -> str:
 
 def simulate_metrics(
     cpu_mean: float,
-    cpu_std: float,
     memory_mean: float,
-    memory_std: float,
     execution_time_mean: float,
-    execution_time_std: float,
 ) -> dict[str, float]:
     """Generate one sample of benchmark metrics from normal distributions.
 
-    Values are clamped to sensible minimums (cpu >= 0, memory >= 0, exec_time >= 0).
+    Standard deviations are automatically computed as STD_FRACTION (10%) of
+    the corresponding mean.  Values are clamped to >= 0.
     """
     rng = np.random.default_rng()
 
-    cpu = float(rng.normal(cpu_mean, cpu_std))
-    memory = float(rng.normal(memory_mean, memory_std))
-    execution_time = float(rng.normal(execution_time_mean, execution_time_std))
+    cpu = float(rng.normal(cpu_mean, cpu_mean * STD_FRACTION))
+    memory = float(rng.normal(memory_mean, memory_mean * STD_FRACTION))
+    execution_time = float(
+        rng.normal(execution_time_mean, execution_time_mean * STD_FRACTION)
+    )
 
     return {
         "cpu_usage": max(0.0, round(cpu, 2)),

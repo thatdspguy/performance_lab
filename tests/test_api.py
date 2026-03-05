@@ -1,6 +1,5 @@
 from unittest.mock import patch
 
-import pytest
 from fastapi.testclient import TestClient
 
 from backend.main import app
@@ -15,12 +14,19 @@ def test_get_apps():
     assert len(apps) == 3
     slugs = {a["slug"] for a in apps}
     assert slugs == {"final_cut", "logic_pro", "xcode"}
-    # Verify structure
     for app_info in apps:
         assert "name" in app_info
-        assert "cpu_mean" in app_info
-        assert "cpu_std" in app_info
-        assert "memory_mean" in app_info
+        assert "repo_url" in app_info
+        assert "workflows" in app_info
+        assert len(app_info["workflows"]) == 3
+
+
+def test_get_config():
+    response = client.get("/api/config")
+    assert response.status_code == 200
+    data = response.json()
+    assert "grafana_urls" in data
+    assert isinstance(data["grafana_urls"], dict)
 
 
 @patch("backend.main.detect_regressions", return_value=[])
@@ -31,17 +37,16 @@ def test_simulate_success(mock_count, mock_write, mock_detect):
         "/api/simulate",
         json={
             "application": "final_cut",
-            "cpu_mean": 45,
-            "cpu_std": 4,
-            "memory_mean": 800,
-            "memory_std": 50,
-            "execution_time_mean": 2.5,
-            "execution_time_std": 0.3,
+            "workflow": "importing_video",
+            "cpu_mean": 40,
+            "memory_mean": 900,
+            "execution_time_mean": 3.0,
         },
     )
     assert response.status_code == 200
     data = response.json()
     assert data["application"] == "final_cut"
+    assert data["workflow"] == "importing_video"
     assert data["commit_number"] == 6
     assert len(data["commit_id"]) == 8
     assert "cpu_usage" in data["metrics"]
@@ -56,12 +61,24 @@ def test_simulate_unknown_app():
         "/api/simulate",
         json={
             "application": "unknown_app",
-            "cpu_mean": 45,
-            "cpu_std": 4,
-            "memory_mean": 800,
-            "memory_std": 50,
-            "execution_time_mean": 2.5,
-            "execution_time_std": 0.3,
+            "workflow": "test_wf",
+            "cpu_mean": 40,
+            "memory_mean": 900,
+            "execution_time_mean": 3.0,
+        },
+    )
+    assert response.status_code == 400
+
+
+def test_simulate_unknown_workflow():
+    response = client.post(
+        "/api/simulate",
+        json={
+            "application": "final_cut",
+            "workflow": "nonexistent_workflow",
+            "cpu_mean": 40,
+            "memory_mean": 900,
+            "execution_time_mean": 3.0,
         },
     )
     assert response.status_code == 400
@@ -87,21 +104,19 @@ def test_get_regressions_empty(mock_query):
 
 
 @patch(
-    "backend.main.run_full_pipeline",
+    "backend.main.run_app_pipeline",
     return_value=(True, "Committed as abc1234", "abc1234"),
 )
 def test_pipeline_success(mock_pipeline):
     response = client.post(
         "/api/pipeline",
         json={
-            "apps": {
-                "final_cut": {
-                    "cpu_mean": 45,
-                    "cpu_std": 4,
-                    "memory_mean": 800,
-                    "memory_std": 50,
-                    "execution_time_mean": 2.5,
-                    "execution_time_std": 0.3,
+            "application": "final_cut",
+            "workflows": {
+                "importing_video": {
+                    "cpu_mean": 40,
+                    "memory_mean": 900,
+                    "execution_time_mean": 3.0,
                 }
             },
             "commit_message": "test commit",
@@ -117,14 +132,29 @@ def test_pipeline_unknown_app():
     response = client.post(
         "/api/pipeline",
         json={
-            "apps": {
-                "unknown_app": {
+            "application": "unknown_app",
+            "workflows": {
+                "test_wf": {
                     "cpu_mean": 1,
-                    "cpu_std": 1,
                     "memory_mean": 1,
-                    "memory_std": 1,
                     "execution_time_mean": 1,
-                    "execution_time_std": 1,
+                }
+            },
+        },
+    )
+    assert response.status_code == 400
+
+
+def test_pipeline_unknown_workflow():
+    response = client.post(
+        "/api/pipeline",
+        json={
+            "application": "final_cut",
+            "workflows": {
+                "nonexistent_workflow": {
+                    "cpu_mean": 1,
+                    "memory_mean": 1,
+                    "execution_time_mean": 1,
                 }
             },
         },
@@ -133,21 +163,19 @@ def test_pipeline_unknown_app():
 
 
 @patch(
-    "backend.main.run_full_pipeline",
+    "backend.main.run_app_pipeline",
     return_value=(False, "git push failed", None),
 )
 def test_pipeline_git_failure(mock_pipeline):
     response = client.post(
         "/api/pipeline",
         json={
-            "apps": {
-                "final_cut": {
-                    "cpu_mean": 45,
-                    "cpu_std": 4,
-                    "memory_mean": 800,
-                    "memory_std": 50,
-                    "execution_time_mean": 2.5,
-                    "execution_time_std": 0.3,
+            "application": "final_cut",
+            "workflows": {
+                "importing_video": {
+                    "cpu_mean": 40,
+                    "memory_mean": 900,
+                    "execution_time_mean": 3.0,
                 }
             },
         },

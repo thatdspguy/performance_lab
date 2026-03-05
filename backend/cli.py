@@ -3,8 +3,8 @@
 Usage:
     uv run python -m backend.cli [--config benchmark_config.json]
 
-Reads benchmark config, simulates metrics, writes to InfluxDB, and runs
-regression detection for each configured application.
+Reads benchmark config (per-workflow format), simulates metrics, writes to
+InfluxDB, and runs regression detection for each workflow.
 """
 
 from __future__ import annotations
@@ -31,41 +31,42 @@ def load_config(config_path: str) -> dict:
 
 
 def run_benchmark(config: dict) -> bool:
-    """Run benchmark simulation for all apps in config.
+    """Run benchmark simulation for all workflows in config.
+
+    Supports the per-workflow config format:
+        { "app": "<slug>", "workflows": { "<wf_slug>": { "cpu_mean": ..., ... } } }
 
     Returns True if any regressions were detected.
     """
     any_regressions = False
-    apps = config.get("apps", {})
+    app_slug = config.get("app", "")
+    workflows = config.get("workflows", {})
 
-    for app_slug, params in apps.items():
-        if app_slug not in APP_DEFINITIONS:
-            print(
-                f"Warning: unknown app '{app_slug}', skipping", file=sys.stderr
-            )
-            continue
+    if app_slug not in APP_DEFINITIONS:
+        print(f"Error: unknown app '{app_slug}'", file=sys.stderr)
+        sys.exit(1)
 
-        print(f"\n--- Benchmarking: {app_slug} ---")
+    commit_id = generate_commit_id()
+    print(f"Benchmarking: {app_slug} (commit {commit_id})")
+    print("=" * 60)
 
-        commit_id = generate_commit_id()
-        commit_number = get_commit_count(app_slug) + 1
+    for wf_slug, params in workflows.items():
+        print(f"\n  Workflow: {wf_slug}")
+        commit_number = get_commit_count(app_slug, workflow=wf_slug) + 1
 
         metrics = simulate_metrics(
             cpu_mean=params["cpu_mean"],
-            cpu_std=params["cpu_std"],
             memory_mean=params["memory_mean"],
-            memory_std=params["memory_std"],
             execution_time_mean=params["execution_time_mean"],
-            execution_time_std=params["execution_time_std"],
         )
 
-        print(f"  Commit: {commit_id} (#{commit_number})")
-        print(f"  CPU: {metrics['cpu_usage']}%")
-        print(f"  Memory: {metrics['memory_usage']} MB")
-        print(f"  Exec Time: {metrics['execution_time']}s")
+        print(f"    CPU:       {metrics['cpu_usage']:.2f}%")
+        print(f"    Memory:    {metrics['memory_usage']:.2f} MB")
+        print(f"    Exec Time: {metrics['execution_time']:.4f}s")
 
         write_metrics(
             application=app_slug,
+            workflow=wf_slug,
             commit_id=commit_id,
             commit_number=commit_number,
             **metrics,
@@ -73,6 +74,7 @@ def run_benchmark(config: dict) -> bool:
 
         regressions = detect_regressions(
             application=app_slug,
+            workflow=wf_slug,
             commit_id=commit_id,
             new_values=metrics,
         )
@@ -81,10 +83,10 @@ def run_benchmark(config: dict) -> bool:
             any_regressions = True
             for r in regressions:
                 print(
-                    f"  REGRESSION: {r.metric} z={r.z_score} ({r.severity})"
+                    f"    REGRESSION: {r.metric} z={r.z_score:.2f} ({r.severity})"
                 )
         else:
-            print("  No regressions detected.")
+            print("    No regressions detected.")
 
     return any_regressions
 
@@ -103,12 +105,11 @@ def main() -> None:
     config = load_config(args.config)
     had_regressions = run_benchmark(config)
 
+    print("\n" + "=" * 60)
     if had_regressions:
-        print(
-            "\n*** Regressions detected! Check InfluxDB/Grafana for details. ***"
-        )
+        print("Regressions detected! Check InfluxDB/Grafana for details.")
     else:
-        print("\nAll benchmarks passed without regressions.")
+        print("All benchmarks passed without regressions.")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ __pycache__/
 *.egg-info/
 dist/
 .venv/
+.pytest_cache/
 
 # uv
 uv.lock
@@ -14,6 +15,9 @@ frontend/dist/
 
 # Environment
 .env
+
+# Cloned mock repos
+repos/
 
 # Docker volumes
 grafana-data/

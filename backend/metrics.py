@@ -19,6 +19,7 @@ def _get_client() -> InfluxDBClient:
 
 def write_metrics(
     application: str,
+    workflow: str,
     commit_id: str,
     commit_number: int,
     cpu_usage: float,
@@ -32,6 +33,7 @@ def write_metrics(
         point = (
             Point("performance_metrics")
             .tag("application", application)
+            .tag("workflow", workflow)
             .tag("commit_id", commit_id)
             .tag("commit_number", str(commit_number))
             .field("cpu_usage", cpu_usage)
@@ -46,6 +48,7 @@ def write_metrics(
 
 def write_regression_event(
     application: str,
+    workflow: str,
     commit_id: str,
     metric: str,
     severity: str,
@@ -61,6 +64,7 @@ def write_regression_event(
         point = (
             Point("regression_events")
             .tag("application", application)
+            .tag("workflow", workflow)
             .tag("commit_id", commit_id)
             .tag("metric", metric)
             .tag("severity", severity)
@@ -76,18 +80,25 @@ def write_regression_event(
 
 
 def query_recent_metrics(
-    application: str, limit: int = 20
+    application: str,
+    workflow: str | None = None,
+    limit: int = 20,
 ) -> list[dict[str, Any]]:
-    """Query the most recent performance_metrics for an application."""
+    """Query the most recent performance_metrics for an application/workflow."""
     client = _get_client()
     try:
         query_api = client.query_api()
+        wf_filter = ""
+        if workflow:
+            wf_filter = (
+                f'  |> filter(fn: (r) => r.workflow == "{workflow}")\n'
+            )
         flux = f"""
 from(bucket: "{settings.influxdb_bucket}")
   |> range(start: -30d)
   |> filter(fn: (r) => r._measurement == "performance_metrics")
   |> filter(fn: (r) => r.application == "{application}")
-  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
+{wf_filter}  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
   |> sort(columns: ["_time"], desc: true)
   |> limit(n: {limit})
 """
@@ -99,6 +110,7 @@ from(bucket: "{settings.influxdb_bucket}")
                     {
                         "time": record.get_time().isoformat(),
                         "application": record.values.get("application", ""),
+                        "workflow": record.values.get("workflow", ""),
                         "commit_id": record.values.get("commit_id", ""),
                         "commit_number": int(
                             record.values.get("commit_number", 0)
@@ -116,22 +128,28 @@ from(bucket: "{settings.influxdb_bucket}")
 
 
 def query_recent_regressions(
-    application: str | None = None, limit: int = 20
+    application: str | None = None,
+    workflow: str | None = None,
+    limit: int = 20,
 ) -> list[dict[str, Any]]:
-    """Query recent regression_events, optionally filtered by application."""
+    """Query recent regression_events, optionally filtered by application/workflow."""
     client = _get_client()
     try:
         query_api = client.query_api()
-        app_filter = ""
+        extra_filters = ""
         if application:
-            app_filter = (
+            extra_filters += (
                 f'  |> filter(fn: (r) => r.application == "{application}")\n'
+            )
+        if workflow:
+            extra_filters += (
+                f'  |> filter(fn: (r) => r.workflow == "{workflow}")\n'
             )
         flux = f"""
 from(bucket: "{settings.influxdb_bucket}")
   |> range(start: -30d)
   |> filter(fn: (r) => r._measurement == "regression_events")
-{app_filter}  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
+{extra_filters}  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
   |> sort(columns: ["_time"], desc: true)
   |> limit(n: {limit})
 """
@@ -143,6 +161,7 @@ from(bucket: "{settings.influxdb_bucket}")
                     {
                         "time": record.get_time().isoformat(),
                         "application": record.values.get("application", ""),
+                        "workflow": record.values.get("workflow", ""),
                         "commit_id": record.values.get("commit_id", ""),
                         "metric": record.values.get("metric", ""),
                         "severity": record.values.get("severity", ""),
@@ -161,17 +180,22 @@ from(bucket: "{settings.influxdb_bucket}")
         client.close()
 
 
-def get_commit_count(application: str) -> int:
-    """Get the current commit count for an application from InfluxDB."""
+def get_commit_count(application: str, workflow: str | None = None) -> int:
+    """Get the current commit count for an application/workflow from InfluxDB."""
     client = _get_client()
     try:
         query_api = client.query_api()
+        wf_filter = ""
+        if workflow:
+            wf_filter = (
+                f'  |> filter(fn: (r) => r.workflow == "{workflow}")\n'
+            )
         flux = f"""
 from(bucket: "{settings.influxdb_bucket}")
   |> range(start: -30d)
   |> filter(fn: (r) => r._measurement == "performance_metrics")
   |> filter(fn: (r) => r.application == "{application}")
-  |> filter(fn: (r) => r._field == "cpu_usage")
+{wf_filter}  |> filter(fn: (r) => r._field == "cpu_usage")
   |> count()
 """
         tables = query_api.query(flux, org=settings.influxdb_org)

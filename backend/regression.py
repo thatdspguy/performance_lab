@@ -10,15 +10,18 @@ MIN_DATA_POINTS = 5
 
 def detect_regressions(
     application: str,
+    workflow: str,
     commit_id: str,
     new_values: dict[str, float],
 ) -> list[RegressionInfo]:
-    """Run z-score regression detection for all metrics.
+    """Run z-score regression detection for all metrics on a specific workflow.
 
-    Queries the last BASELINE_WINDOW data points (excluding the just-written one)
-    and computes z-scores. Detected regressions are written to InfluxDB and returned.
+    Queries the last BASELINE_WINDOW data points for the given application and
+    workflow, computes z-scores, and writes detected regressions to InfluxDB.
     """
-    recent = query_recent_metrics(application, limit=BASELINE_WINDOW)
+    recent = query_recent_metrics(
+        application, workflow=workflow, limit=BASELINE_WINDOW
+    )
 
     if len(recent) < MIN_DATA_POINTS:
         return []
@@ -59,6 +62,7 @@ def detect_regressions(
 
         write_regression_event(
             application=application,
+            workflow=workflow,
             commit_id=commit_id,
             metric=metric,
             severity=severity,

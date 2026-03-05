@@ -1,38 +1,42 @@
-"""Full pipeline: write benchmark config, commit, and push."""
+"""Pipeline: write workflow config to a mock repo, commit, and push."""
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
 
-from backend.git_ops import GitError, commit_and_push, get_repo_root
+from backend.git_ops import GitError, commit_and_push, get_repo_path, clone_repo
+from backend.apps import APP_DEFINITIONS
 from backend.models import PipelineRequest
 
 CONFIG_FILENAME = "benchmark_config.json"
 
 
-def write_benchmark_config(request: PipelineRequest) -> Path:
-    """Write benchmark config JSON to the repository root.
+def write_workflow_config(request: PipelineRequest) -> Path:
+    """Write workflow benchmark config JSON to the mock app repository.
 
     Returns the absolute path to the written file.
     """
-    repo_root = get_repo_root()
-    config_path = repo_root / CONFIG_FILENAME
+    app_def = APP_DEFINITIONS[request.application]
+    repo_path = get_repo_path(request.application)
+
+    # Ensure the repo is cloned
+    if not (repo_path / ".git").exists():
+        clone_repo(app_def.repo_url, repo_path)
 
     config_data = {
-        "apps": {
-            slug: {
-                "cpu_mean": app_config.cpu_mean,
-                "cpu_std": app_config.cpu_std,
-                "memory_mean": app_config.memory_mean,
-                "memory_std": app_config.memory_std,
-                "execution_time_mean": app_config.execution_time_mean,
-                "execution_time_std": app_config.execution_time_std,
+        "app": request.application,
+        "workflows": {
+            wf_slug: {
+                "cpu_mean": wf_config.cpu_mean,
+                "memory_mean": wf_config.memory_mean,
+                "execution_time_mean": wf_config.execution_time_mean,
             }
-            for slug, app_config in request.apps.items()
-        }
+            for wf_slug, wf_config in request.workflows.items()
+        },
     }
 
+    config_path = repo_path / CONFIG_FILENAME
     with open(config_path, "w") as f:
         json.dump(config_data, f, indent=2)
         f.write("\n")
@@ -40,19 +44,23 @@ def write_benchmark_config(request: PipelineRequest) -> Path:
     return config_path
 
 
-def run_full_pipeline(
+def run_app_pipeline(
     request: PipelineRequest,
 ) -> tuple[bool, str, str | None]:
-    """Execute the full pipeline: write config -> git add -> commit -> push.
+    """Execute the pipeline for a single mock app repo.
+
+    Writes config, commits, and pushes to the mock app's repository.
 
     Returns:
         (success, message, commit_hash_or_none)
     """
     try:
-        write_benchmark_config(request)
+        write_workflow_config(request)
+        repo_path = get_repo_path(request.application)
         commit_hash = commit_and_push(
             file_path=CONFIG_FILENAME,
             message=request.commit_message,
+            cwd=str(repo_path),
         )
         return True, f"Committed and pushed as {commit_hash}", commit_hash
     except GitError as exc:

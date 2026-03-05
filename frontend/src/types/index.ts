@@ -1,22 +1,30 @@
-export interface AppInfo {
+export interface WorkflowInfo {
   name: string;
   slug: string;
   cpu_mean: number;
-  cpu_std: number;
   memory_mean: number;
-  memory_std: number;
   execution_time_mean: number;
-  execution_time_std: number;
+}
+
+export interface AppInfo {
+  name: string;
+  slug: string;
+  repo_url: string;
+  workflows: WorkflowInfo[];
+}
+
+export interface WorkflowConfig {
+  cpu_mean: number;
+  memory_mean: number;
+  execution_time_mean: number;
 }
 
 export interface SimulateRequest {
   application: string;
+  workflow: string;
   cpu_mean: number;
-  cpu_std: number;
   memory_mean: number;
-  memory_std: number;
   execution_time_mean: number;
-  execution_time_std: number;
 }
 
 export interface MetricsResult {
@@ -38,6 +46,7 @@ export interface SimulateResponse {
   commit_id: string;
   commit_number: number;
   application: string;
+  workflow: string;
   metrics: MetricsResult;
   regressions: RegressionInfo[];
 }
@@ -45,6 +54,7 @@ export interface SimulateResponse {
 export interface RegressionRecord {
   time: string;
   application: string;
+  workflow: string;
   commit_id: string;
   metric: string;
   severity: string;
@@ -54,17 +64,18 @@ export interface RegressionRecord {
   baseline_std: number;
 }
 
-export interface AppBenchmarkConfig {
-  cpu_mean: number;
-  cpu_std: number;
-  memory_mean: number;
-  memory_std: number;
-  execution_time_mean: number;
-  execution_time_std: number;
+export interface PipelineRequest {
+  application: string;
+  workflows: Record<string, WorkflowConfig>;
+  commit_message?: string;
 }
 
 export interface PipelineResponse {
   success: boolean;
   commit_id: string | null;
   message: string;
+}
+
+export interface AppConfigResponse {
+  grafana_urls: Record<string, string>;
 }
