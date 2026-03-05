@@ -1,7 +1,7 @@
 {
   "apps": {
     "final_cut": {
-      "cpu_mean": 52.0,
+      "cpu_mean": 10.0,
       "cpu_std": 4.0,
       "memory_mean": 800.0,
       "memory_std": 50.0,
