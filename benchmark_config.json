@@ -9,7 +9,7 @@
       "execution_time_std": 0.3
     },
     "logic_pro": {
-      "cpu_mean": 30.0,
+      "cpu_mean": 53.0,
       "cpu_std": 3.0,
       "memory_mean": 400.0,
       "memory_std": 25.0,
