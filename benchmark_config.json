@@ -1,9 +1,9 @@
 {
   "apps": {
     "final_cut": {
-      "cpu_mean": 45.0,
+      "cpu_mean": 100.0,
       "cpu_std": 4.0,
-      "memory_mean": 800.0,
+      "memory_mean": 4000.0,
       "memory_std": 50.0,
       "execution_time_mean": 2.5,
       "execution_time_std": 0.3
@@ -21,7 +21,7 @@
       "cpu_std": 5.0,
       "memory_mean": 1200.0,
       "memory_std": 80.0,
-      "execution_time_mean": 4.8,
+      "execution_time_mean": 4.0,
       "execution_time_std": 0.5
     }
   }
