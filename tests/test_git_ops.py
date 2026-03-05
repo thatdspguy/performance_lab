@@ -37,8 +37,9 @@ def test_run_git_not_found(mock_run):
         _run_git("status")
 
 
+@patch("backend.git_ops._has_staged_changes", return_value=True)
 @patch("backend.git_ops._run_git")
-def test_commit_and_push(mock_git):
+def test_commit_and_push(mock_git, mock_staged):
     mock_git.side_effect = [
         "/repo",  # get_repo_root -> rev-parse --show-toplevel
         "",  # git add
@@ -49,3 +50,14 @@ def test_commit_and_push(mock_git):
     result = commit_and_push("benchmark_config.json", "test commit")
     assert result == "abc1234"
     assert mock_git.call_count == 5
+
+
+@patch("backend.git_ops._has_staged_changes", return_value=False)
+@patch("backend.git_ops._run_git")
+def test_commit_and_push_no_changes(mock_git, mock_staged):
+    mock_git.side_effect = [
+        "/repo",  # get_repo_root -> rev-parse --show-toplevel
+        "",  # git add
+    ]
+    with pytest.raises(GitError, match="No changes to commit"):
+        commit_and_push("benchmark_config.json", "test commit")
