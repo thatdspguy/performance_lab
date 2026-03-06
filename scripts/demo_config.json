@@ -1,0 +1,1220 @@
+{
+  "settings": {
+    "batch_size": 3,
+    "delay_between_batches_seconds": 10,
+    "apps": [
+      "final_cut",
+      "logic_pro",
+      "xcode"
+    ],
+    "commit_order": "interleaved"
+  },
+  "apps": {
+    "final_cut": {
+      "name": "Final Cut Pro",
+      "workflow_slugs": [
+        "importing_video",
+        "editing_video",
+        "exporting_video"
+      ],
+      "commits": [
+        {
+          "commit_number": 1,
+          "commit_message": "Initial benchmark baseline",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 55.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 2.0
+            },
+            "exporting_video": {
+              "cpu_mean": 75.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 8.0
+            }
+          }
+        },
+        {
+          "commit_number": 2,
+          "commit_message": "Add ProRes RAW codec support",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 42.0,
+              "memory_mean": 920.0,
+              "execution_time_mean": 3.1
+            },
+            "editing_video": {
+              "cpu_mean": 55.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 2.0
+            },
+            "exporting_video": {
+              "cpu_mean": 75.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 8.0
+            }
+          }
+        },
+        {
+          "commit_number": 3,
+          "commit_message": "Optimize media thumbnail generation",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 38.0,
+              "memory_mean": 880.0,
+              "execution_time_mean": 2.8
+            },
+            "editing_video": {
+              "cpu_mean": 55.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 2.0
+            },
+            "exporting_video": {
+              "cpu_mean": 75.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 8.0
+            }
+          }
+        },
+        {
+          "commit_number": 4,
+          "commit_message": "Refactor timeline rendering engine",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 52.0,
+              "memory_mean": 1150.0,
+              "execution_time_mean": 1.9
+            },
+            "exporting_video": {
+              "cpu_mean": 75.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 8.0
+            }
+          }
+        },
+        {
+          "commit_number": 5,
+          "commit_message": "Add multicam sync detection",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 43.0,
+              "memory_mean": 950.0,
+              "execution_time_mean": 3.2
+            },
+            "editing_video": {
+              "cpu_mean": 55.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 2.0
+            },
+            "exporting_video": {
+              "cpu_mean": 75.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 8.0
+            }
+          }
+        },
+        {
+          "commit_number": 6,
+          "commit_message": "Enable GPU-accelerated transitions",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 48.0,
+              "memory_mean": 1100.0,
+              "execution_time_mean": 1.7
+            },
+            "exporting_video": {
+              "cpu_mean": 70.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 7.5
+            }
+          }
+        },
+        {
+          "commit_number": 7,
+          "commit_message": "Update color grading LUT pipeline",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 54.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 2.0
+            },
+            "exporting_video": {
+              "cpu_mean": 73.0,
+              "memory_mean": 1480.0,
+              "execution_time_mean": 7.8
+            }
+          }
+        },
+        {
+          "commit_number": 8,
+          "commit_message": "Fix memory leak in clip browser",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 39.0,
+              "memory_mean": 860.0,
+              "execution_time_mean": 2.9
+            },
+            "editing_video": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1100.0,
+              "execution_time_mean": 1.9
+            },
+            "exporting_video": {
+              "cpu_mean": 74.0,
+              "memory_mean": 1450.0,
+              "execution_time_mean": 7.8
+            }
+          }
+        },
+        {
+          "commit_number": 9,
+          "commit_message": "Add spatial audio import support",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 41.0,
+              "memory_mean": 910.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 55.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 2.0
+            },
+            "exporting_video": {
+              "cpu_mean": 75.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 8.0
+            }
+          }
+        },
+        {
+          "commit_number": 10,
+          "commit_message": "Parallelize background rendering",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 50.0,
+              "memory_mean": 1150.0,
+              "execution_time_mean": 1.8
+            },
+            "exporting_video": {
+              "cpu_mean": 68.0,
+              "memory_mean": 1350.0,
+              "execution_time_mean": 7.0
+            }
+          }
+        },
+        {
+          "commit_number": 11,
+          "commit_message": "Optimize XML project parser",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 38.0,
+              "memory_mean": 870.0,
+              "execution_time_mean": 2.7
+            },
+            "editing_video": {
+              "cpu_mean": 50.0,
+              "memory_mean": 1150.0,
+              "execution_time_mean": 1.8
+            },
+            "exporting_video": {
+              "cpu_mean": 68.0,
+              "memory_mean": 1350.0,
+              "execution_time_mean": 7.0
+            }
+          }
+        },
+        {
+          "commit_number": 12,
+          "commit_message": "Add HEVC hardware decode path",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 37.0,
+              "memory_mean": 850.0,
+              "execution_time_mean": 2.6
+            },
+            "editing_video": {
+              "cpu_mean": 50.0,
+              "memory_mean": 1150.0,
+              "execution_time_mean": 1.8
+            },
+            "exporting_video": {
+              "cpu_mean": 68.0,
+              "memory_mean": 1350.0,
+              "execution_time_mean": 7.0
+            }
+          }
+        },
+        {
+          "commit_number": 13,
+          "commit_message": "Refactor audio waveform cache",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 49.0,
+              "memory_mean": 1130.0,
+              "execution_time_mean": 1.8
+            },
+            "exporting_video": {
+              "cpu_mean": 68.0,
+              "memory_mean": 1350.0,
+              "execution_time_mean": 7.0
+            }
+          }
+        },
+        {
+          "commit_number": 14,
+          "commit_message": "Add 8K timeline support",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1250.0,
+              "execution_time_mean": 2.0
+            },
+            "exporting_video": {
+              "cpu_mean": 72.0,
+              "memory_mean": 1450.0,
+              "execution_time_mean": 7.5
+            }
+          }
+        },
+        {
+          "commit_number": 15,
+          "commit_message": "Enable Smart Conform auto-crop",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 51.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 1.9
+            },
+            "exporting_video": {
+              "cpu_mean": 70.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 7.2
+            }
+          }
+        },
+        {
+          "commit_number": 16,
+          "commit_message": "Upgrade motion templates engine",
+          "workflows": {
+            "importing_video": {
+              "cpu_mean": 40.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 3.0
+            },
+            "editing_video": {
+              "cpu_mean": 52.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 1.9
+            },
+            "exporting_video": {
+              "cpu_mean": 70.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 7.2
+            }
+          }
+        }
+      ]
+    },
+    "logic_pro": {
+      "name": "Logic Pro",
+      "workflow_slugs": [
+        "loading_project",
+        "realtime_playback",
+        "bouncing_final_mix"
+      ],
+      "commits": [
+        {
+          "commit_number": 1,
+          "commit_message": "Initial benchmark baseline",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 50.0,
+              "memory_mean": 800.0,
+              "execution_time_mean": 1.0
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 65.0,
+              "memory_mean": 700.0,
+              "execution_time_mean": 5.0
+            }
+          }
+        },
+        {
+          "commit_number": 2,
+          "commit_message": "Add ARA2 plugin bridge layer",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 36.0,
+              "memory_mean": 620.0,
+              "execution_time_mean": 2.6
+            },
+            "realtime_playback": {
+              "cpu_mean": 51.0,
+              "memory_mean": 810.0,
+              "execution_time_mean": 1.0
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 65.0,
+              "memory_mean": 700.0,
+              "execution_time_mean": 5.0
+            }
+          }
+        },
+        {
+          "commit_number": 3,
+          "commit_message": "Optimize sample library indexing",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 33.0,
+              "memory_mean": 570.0,
+              "execution_time_mean": 2.3
+            },
+            "realtime_playback": {
+              "cpu_mean": 50.0,
+              "memory_mean": 800.0,
+              "execution_time_mean": 1.0
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 65.0,
+              "memory_mean": 700.0,
+              "execution_time_mean": 5.0
+            }
+          }
+        },
+        {
+          "commit_number": 4,
+          "commit_message": "Refactor audio engine thread pool",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 46.0,
+              "memory_mean": 770.0,
+              "execution_time_mean": 0.9
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 62.0,
+              "memory_mean": 680.0,
+              "execution_time_mean": 4.7
+            }
+          }
+        },
+        {
+          "commit_number": 5,
+          "commit_message": "Add MIDI 2.0 protocol support",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 50.0,
+              "memory_mean": 800.0,
+              "execution_time_mean": 1.0
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 65.0,
+              "memory_mean": 700.0,
+              "execution_time_mean": 5.0
+            }
+          }
+        },
+        {
+          "commit_number": 6,
+          "commit_message": "Enable multi-threaded plugin scanning",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 32.0,
+              "memory_mean": 560.0,
+              "execution_time_mean": 2.2
+            },
+            "realtime_playback": {
+              "cpu_mean": 50.0,
+              "memory_mean": 800.0,
+              "execution_time_mean": 1.0
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 65.0,
+              "memory_mean": 700.0,
+              "execution_time_mean": 5.0
+            }
+          }
+        },
+        {
+          "commit_number": 7,
+          "commit_message": "Add Dolby Atmos spatial panner",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 52.0,
+              "memory_mean": 830.0,
+              "execution_time_mean": 1.1
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 67.0,
+              "memory_mean": 720.0,
+              "execution_time_mean": 5.2
+            }
+          }
+        },
+        {
+          "commit_number": 8,
+          "commit_message": "Optimize reverb convolution FFT",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 47.0,
+              "memory_mean": 780.0,
+              "execution_time_mean": 0.9
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 63.0,
+              "memory_mean": 690.0,
+              "execution_time_mean": 4.8
+            }
+          }
+        },
+        {
+          "commit_number": 9,
+          "commit_message": "Fix sample rate conversion edge case",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 49.0,
+              "memory_mean": 790.0,
+              "execution_time_mean": 1.0
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 64.0,
+              "memory_mean": 700.0,
+              "execution_time_mean": 4.9
+            }
+          }
+        },
+        {
+          "commit_number": 10,
+          "commit_message": "Add live looping engine",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 48.0,
+              "memory_mean": 790.0,
+              "execution_time_mean": 0.95
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 64.0,
+              "memory_mean": 700.0,
+              "execution_time_mean": 4.9
+            }
+          }
+        },
+        {
+          "commit_number": 11,
+          "commit_message": "Parallelize offline bounce",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 48.0,
+              "memory_mean": 790.0,
+              "execution_time_mean": 0.95
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 58.0,
+              "memory_mean": 650.0,
+              "execution_time_mean": 4.2
+            }
+          }
+        },
+        {
+          "commit_number": 12,
+          "commit_message": "Optimize project auto-save",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 34.0,
+              "memory_mean": 580.0,
+              "execution_time_mean": 2.4
+            },
+            "realtime_playback": {
+              "cpu_mean": 48.0,
+              "memory_mean": 790.0,
+              "execution_time_mean": 0.95
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 58.0,
+              "memory_mean": 650.0,
+              "execution_time_mean": 4.2
+            }
+          }
+        },
+        {
+          "commit_number": 13,
+          "commit_message": "Add stem export functionality",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 48.0,
+              "memory_mean": 790.0,
+              "execution_time_mean": 0.95
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 60.0,
+              "memory_mean": 670.0,
+              "execution_time_mean": 4.4
+            }
+          }
+        },
+        {
+          "commit_number": 14,
+          "commit_message": "Refactor plugin delay compensation",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 47.0,
+              "memory_mean": 780.0,
+              "execution_time_mean": 0.9
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 58.0,
+              "memory_mean": 650.0,
+              "execution_time_mean": 4.2
+            }
+          }
+        },
+        {
+          "commit_number": 15,
+          "commit_message": "Enable 192kHz session support",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 36.0,
+              "memory_mean": 640.0,
+              "execution_time_mean": 2.6
+            },
+            "realtime_playback": {
+              "cpu_mean": 50.0,
+              "memory_mean": 820.0,
+              "execution_time_mean": 1.0
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 60.0,
+              "memory_mean": 670.0,
+              "execution_time_mean": 4.5
+            }
+          }
+        },
+        {
+          "commit_number": 16,
+          "commit_message": "Optimize automation envelope rendering",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 46.0,
+              "memory_mean": 770.0,
+              "execution_time_mean": 0.9
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 58.0,
+              "memory_mean": 650.0,
+              "execution_time_mean": 4.2
+            }
+          }
+        },
+        {
+          "commit_number": 17,
+          "commit_message": "Add real-time pitch correction plugin",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 73.0,
+              "memory_mean": 1100.0,
+              "execution_time_mean": 1.8
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 58.0,
+              "memory_mean": 650.0,
+              "execution_time_mean": 4.2
+            }
+          }
+        },
+        {
+          "commit_number": 18,
+          "commit_message": "Throttle pitch correction to half rate",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 58.0,
+              "memory_mean": 900.0,
+              "execution_time_mean": 1.3
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 58.0,
+              "memory_mean": 650.0,
+              "execution_time_mean": 4.2
+            }
+          }
+        },
+        {
+          "commit_number": 19,
+          "commit_message": "Move pitch correction to dedicated DSP thread",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 48.0,
+              "memory_mean": 800.0,
+              "execution_time_mean": 0.95
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 58.0,
+              "memory_mean": 650.0,
+              "execution_time_mean": 4.2
+            }
+          }
+        },
+        {
+          "commit_number": 20,
+          "commit_message": "Add AI mastering assistant (bounce only)",
+          "workflows": {
+            "loading_project": {
+              "cpu_mean": 35.0,
+              "memory_mean": 600.0,
+              "execution_time_mean": 2.5
+            },
+            "realtime_playback": {
+              "cpu_mean": 48.0,
+              "memory_mean": 800.0,
+              "execution_time_mean": 0.95
+            },
+            "bouncing_final_mix": {
+              "cpu_mean": 78.0,
+              "memory_mean": 950.0,
+              "execution_time_mean": 6.8
+            }
+          }
+        }
+      ]
+    },
+    "xcode": {
+      "name": "Xcode",
+      "workflow_slugs": [
+        "clean_build",
+        "incremental_build",
+        "run_unit_tests"
+      ],
+      "commits": [
+        {
+          "commit_number": 1,
+          "commit_message": "Initial benchmark baseline",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 80.0,
+              "memory_mean": 2000.0,
+              "execution_time_mean": 6.0
+            },
+            "incremental_build": {
+              "cpu_mean": 45.0,
+              "memory_mean": 1200.0,
+              "execution_time_mean": 1.5
+            },
+            "run_unit_tests": {
+              "cpu_mean": 60.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 4.0
+            }
+          }
+        },
+        {
+          "commit_number": 2,
+          "commit_message": "Add Swift 6 strict concurrency checks",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 82.0,
+              "memory_mean": 2050.0,
+              "execution_time_mean": 6.2
+            },
+            "incremental_build": {
+              "cpu_mean": 46.0,
+              "memory_mean": 1220.0,
+              "execution_time_mean": 1.6
+            },
+            "run_unit_tests": {
+              "cpu_mean": 60.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 4.0
+            }
+          }
+        },
+        {
+          "commit_number": 3,
+          "commit_message": "Enable incremental build caching",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 80.0,
+              "memory_mean": 2000.0,
+              "execution_time_mean": 6.0
+            },
+            "incremental_build": {
+              "cpu_mean": 40.0,
+              "memory_mean": 1100.0,
+              "execution_time_mean": 1.2
+            },
+            "run_unit_tests": {
+              "cpu_mean": 60.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 4.0
+            }
+          }
+        },
+        {
+          "commit_number": 4,
+          "commit_message": "Optimize dependency graph resolver",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 76.0,
+              "memory_mean": 1950.0,
+              "execution_time_mean": 5.7
+            },
+            "incremental_build": {
+              "cpu_mean": 38.0,
+              "memory_mean": 1080.0,
+              "execution_time_mean": 1.1
+            },
+            "run_unit_tests": {
+              "cpu_mean": 60.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 4.0
+            }
+          }
+        },
+        {
+          "commit_number": 5,
+          "commit_message": "Add SwiftUI preview compilation",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 78.0,
+              "memory_mean": 2000.0,
+              "execution_time_mean": 5.9
+            },
+            "incremental_build": {
+              "cpu_mean": 42.0,
+              "memory_mean": 1150.0,
+              "execution_time_mean": 1.3
+            },
+            "run_unit_tests": {
+              "cpu_mean": 60.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 4.0
+            }
+          }
+        },
+        {
+          "commit_number": 6,
+          "commit_message": "Parallelize module compilation",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 72.0,
+              "memory_mean": 1900.0,
+              "execution_time_mean": 5.3
+            },
+            "incremental_build": {
+              "cpu_mean": 38.0,
+              "memory_mean": 1080.0,
+              "execution_time_mean": 1.1
+            },
+            "run_unit_tests": {
+              "cpu_mean": 60.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 4.0
+            }
+          }
+        },
+        {
+          "commit_number": 7,
+          "commit_message": "Optimize linker symbol resolution",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 70.0,
+              "memory_mean": 1850.0,
+              "execution_time_mean": 5.1
+            },
+            "incremental_build": {
+              "cpu_mean": 37.0,
+              "memory_mean": 1050.0,
+              "execution_time_mean": 1.1
+            },
+            "run_unit_tests": {
+              "cpu_mean": 60.0,
+              "memory_mean": 1500.0,
+              "execution_time_mean": 4.0
+            }
+          }
+        },
+        {
+          "commit_number": 8,
+          "commit_message": "Add distributed test execution",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 80.0,
+              "memory_mean": 2000.0,
+              "execution_time_mean": 6.0
+            },
+            "incremental_build": {
+              "cpu_mean": 38.0,
+              "memory_mean": 1080.0,
+              "execution_time_mean": 1.1
+            },
+            "run_unit_tests": {
+              "cpu_mean": 52.0,
+              "memory_mean": 1350.0,
+              "execution_time_mean": 3.2
+            }
+          }
+        },
+        {
+          "commit_number": 9,
+          "commit_message": "Enable code coverage instrumentation",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 80.0,
+              "memory_mean": 2000.0,
+              "execution_time_mean": 6.0
+            },
+            "incremental_build": {
+              "cpu_mean": 38.0,
+              "memory_mean": 1080.0,
+              "execution_time_mean": 1.1
+            },
+            "run_unit_tests": {
+              "cpu_mean": 56.0,
+              "memory_mean": 1450.0,
+              "execution_time_mean": 3.6
+            }
+          }
+        },
+        {
+          "commit_number": 10,
+          "commit_message": "Optimize XCTest assertion macros",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 80.0,
+              "memory_mean": 2000.0,
+              "execution_time_mean": 6.0
+            },
+            "incremental_build": {
+              "cpu_mean": 38.0,
+              "memory_mean": 1080.0,
+              "execution_time_mean": 1.1
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 11,
+          "commit_message": "Add precompiled bridging header cache",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 75.0,
+              "memory_mean": 1900.0,
+              "execution_time_mean": 5.5
+            },
+            "incremental_build": {
+              "cpu_mean": 36.0,
+              "memory_mean": 1020.0,
+              "execution_time_mean": 1.0
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 12,
+          "commit_message": "Refactor build system plist handling",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 74.0,
+              "memory_mean": 1880.0,
+              "execution_time_mean": 5.4
+            },
+            "incremental_build": {
+              "cpu_mean": 36.0,
+              "memory_mean": 1020.0,
+              "execution_time_mean": 1.0
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 13,
+          "commit_message": "Enable explicit module builds",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 76.0,
+              "memory_mean": 1920.0,
+              "execution_time_mean": 5.6
+            },
+            "incremental_build": {
+              "cpu_mean": 37.0,
+              "memory_mean": 1050.0,
+              "execution_time_mean": 1.1
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 14,
+          "commit_message": "Optimize asset catalog compilation",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 73.0,
+              "memory_mean": 1870.0,
+              "execution_time_mean": 5.3
+            },
+            "incremental_build": {
+              "cpu_mean": 35.0,
+              "memory_mean": 1000.0,
+              "execution_time_mean": 1.0
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 15,
+          "commit_message": "Add Swift macro expansion support",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 75.0,
+              "memory_mean": 1900.0,
+              "execution_time_mean": 5.5
+            },
+            "incremental_build": {
+              "cpu_mean": 36.0,
+              "memory_mean": 1020.0,
+              "execution_time_mean": 1.0
+            },
+            "run_unit_tests": {
+              "cpu_mean": 54.0,
+              "memory_mean": 1420.0,
+              "execution_time_mean": 3.4
+            }
+          }
+        },
+        {
+          "commit_number": 16,
+          "commit_message": "Enable whole-module optimization by default",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 74.0,
+              "memory_mean": 1870.0,
+              "execution_time_mean": 5.3
+            },
+            "incremental_build": {
+              "cpu_mean": 35.0,
+              "memory_mean": 1000.0,
+              "execution_time_mean": 1.0
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 17,
+          "commit_message": "Add on-device debugging instrumentation",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 73.0,
+              "memory_mean": 1870.0,
+              "execution_time_mean": 5.3
+            },
+            "incremental_build": {
+              "cpu_mean": 35.0,
+              "memory_mean": 1000.0,
+              "execution_time_mean": 1.0
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 18,
+          "commit_message": "Integrate new static analyzer passes",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 92.0,
+              "memory_mean": 2600.0,
+              "execution_time_mean": 8.5
+            },
+            "incremental_build": {
+              "cpu_mean": 52.0,
+              "memory_mean": 1600.0,
+              "execution_time_mean": 2.3
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 19,
+          "commit_message": "Make static analysis opt-in for incremental builds",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 90.0,
+              "memory_mean": 2500.0,
+              "execution_time_mean": 8.2
+            },
+            "incremental_build": {
+              "cpu_mean": 36.0,
+              "memory_mean": 1020.0,
+              "execution_time_mean": 1.0
+            },
+            "run_unit_tests": {
+              "cpu_mean": 53.0,
+              "memory_mean": 1400.0,
+              "execution_time_mean": 3.3
+            }
+          }
+        },
+        {
+          "commit_number": 20,
+          "commit_message": "Parallelize static analyzer with build pipeline",
+          "workflows": {
+            "clean_build": {
+              "cpu_mean": 76.0,
+              "memory_mean": 1950.0,
+              "execution_time_mean": 5.7
+            },
+            "incremental_build": {
+              "cpu_mean": 36.0,
+              "memory_mean": 1020.0,
+              "execution_time_mean": 1.0
+            },
+            "run_unit_tests": {
+              "cpu_mean": 70.0,
+              "memory_mean": 1800.0,
+              "execution_time_mean": 5.5
+            }
+          }
+        }
+      ]
+    }
+  }
+}

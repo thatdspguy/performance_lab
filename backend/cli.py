@@ -17,7 +17,7 @@ from pathlib import Path
 from backend.apps import APP_DEFINITIONS
 from backend.metrics import get_commit_count, write_metrics
 from backend.regression import detect_regressions
-from backend.simulator import generate_commit_id, simulate_metrics
+from backend.simulator import get_commit_id, simulate_metrics
 
 
 def load_config(config_path: str) -> dict:
@@ -46,7 +46,7 @@ def run_benchmark(config: dict) -> bool:
         print(f"Error: unknown app '{app_slug}'", file=sys.stderr)
         sys.exit(1)
 
-    commit_id = generate_commit_id()
+    commit_id = get_commit_id()
     print(f"Benchmarking: {app_slug} (commit {commit_id})")
     print("=" * 60)
 

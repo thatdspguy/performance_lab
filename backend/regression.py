@@ -43,9 +43,9 @@ def detect_regressions(
         new_value = new_values[metric]
         z_score = (new_value - baseline_mean) / baseline_std
 
-        if abs(z_score) > 3:
+        if z_score > 3:
             severity = "strong"
-        elif abs(z_score) > 2:
+        elif z_score > 2:
             severity = "possible"
         else:
             continue

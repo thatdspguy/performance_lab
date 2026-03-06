@@ -3,13 +3,45 @@
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 
-from backend.git_ops import GitError, commit_and_push, get_repo_path, clone_repo
+from backend.git_ops import (
+    GitError, commit_and_push, get_repo_path, clone_repo,
+    get_performance_lab_root,
+)
 from backend.apps import APP_DEFINITIONS
 from backend.models import PipelineRequest
 
 CONFIG_FILENAME = "benchmark_config.json"
+
+# Template files to keep in sync alongside the benchmark config.
+_TEMPLATE_FILES = [
+    "run_benchmarks.py",
+    ".github/workflows/benchmark.yml",
+]
+
+
+def _get_template_dir(app_slug: str) -> Path:
+    """Return the mock_repo_templates directory for an app."""
+    app_def = APP_DEFINITIONS[app_slug]
+    repo_name = app_def.repo_url.rstrip("/").split("/")[-1]
+    if repo_name.endswith(".git"):
+        repo_name = repo_name[:-4]
+    return get_performance_lab_root() / "mock_repo_templates" / repo_name
+
+
+def sync_template_files(app_slug: str) -> None:
+    """Copy template files (run_benchmarks.py, workflow) to the cloned repo."""
+    template_dir = _get_template_dir(app_slug)
+    repo_path = get_repo_path(app_slug)
+
+    for rel_path in _TEMPLATE_FILES:
+        src = template_dir / rel_path
+        dst = repo_path / rel_path
+        if src.exists():
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dst)
 
 
 def write_workflow_config(request: PipelineRequest) -> Path:
@@ -56,9 +88,10 @@ def run_app_pipeline(
     """
     try:
         write_workflow_config(request)
+        sync_template_files(request.application)
         repo_path = get_repo_path(request.application)
         commit_hash = commit_and_push(
-            file_path=CONFIG_FILENAME,
+            file_paths=[CONFIG_FILENAME] + _TEMPLATE_FILES,
             message=request.commit_message,
             cwd=str(repo_path),
         )

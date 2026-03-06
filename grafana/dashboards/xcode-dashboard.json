@@ -19,10 +19,15 @@
           "uid": "influxdb-performance-lab"
         },
         "enable": true,
-        "hide": false,
+        "hide": true,
         "iconColor": "red",
-        "name": "Strong Regressions",
-        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: \" + r.metric + \" z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])"
+        "name": "STRONG - clean_build/cpu_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r.metric == \"cpu_usage\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: cpu_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            101
+          ]
+        }
       },
       {
         "datasource": {
@@ -30,10 +35,271 @@
           "uid": "influxdb-performance-lab"
         },
         "enable": true,
-        "hide": false,
+        "hide": true,
         "iconColor": "orange",
-        "name": "Possible Regressions",
-        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: \" + r.metric + \" z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])"
+        "name": "POSSIBLE - clean_build/cpu_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r.metric == \"cpu_usage\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: cpu_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            101
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "red",
+        "name": "STRONG - clean_build/memory_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r.metric == \"memory_usage\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: memory_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            102
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "orange",
+        "name": "POSSIBLE - clean_build/memory_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r.metric == \"memory_usage\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: memory_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            102
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "red",
+        "name": "STRONG - clean_build/execution_time",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r.metric == \"execution_time\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: execution_time z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            103
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "orange",
+        "name": "POSSIBLE - clean_build/execution_time",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r.metric == \"execution_time\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: execution_time z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            103
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "red",
+        "name": "STRONG - incremental_build/cpu_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r.metric == \"cpu_usage\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: cpu_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            201
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "orange",
+        "name": "POSSIBLE - incremental_build/cpu_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r.metric == \"cpu_usage\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: cpu_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            201
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "red",
+        "name": "STRONG - incremental_build/memory_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r.metric == \"memory_usage\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: memory_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            202
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "orange",
+        "name": "POSSIBLE - incremental_build/memory_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r.metric == \"memory_usage\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: memory_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            202
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "red",
+        "name": "STRONG - incremental_build/execution_time",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r.metric == \"execution_time\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: execution_time z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            203
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "orange",
+        "name": "POSSIBLE - incremental_build/execution_time",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r.metric == \"execution_time\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: execution_time z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            203
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "red",
+        "name": "STRONG - run_unit_tests/cpu_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r.metric == \"cpu_usage\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: cpu_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            301
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "orange",
+        "name": "POSSIBLE - run_unit_tests/cpu_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r.metric == \"cpu_usage\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: cpu_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            301
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "red",
+        "name": "STRONG - run_unit_tests/memory_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r.metric == \"memory_usage\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: memory_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            302
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "orange",
+        "name": "POSSIBLE - run_unit_tests/memory_usage",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r.metric == \"memory_usage\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: memory_usage z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            302
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "red",
+        "name": "STRONG - run_unit_tests/execution_time",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r.metric == \"execution_time\")\n  |> filter(fn: (r) => r.severity == \"strong\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"STRONG: execution_time z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            303
+          ]
+        }
+      },
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb-performance-lab"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "orange",
+        "name": "POSSIBLE - run_unit_tests/execution_time",
+        "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regression_events\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r.metric == \"execution_time\")\n  |> filter(fn: (r) => r.severity == \"possible\")\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({r with _value: \"POSSIBLE: execution_time z=\" + string(v: r.z_score)}))\n  |> keep(columns: [\"_time\", \"_value\"])",
+        "filter": {
+          "ids": [
+            303
+          ]
+        }
       }
     ]
   },
@@ -76,7 +342,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -93,7 +359,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r._field == \"cpu_usage\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r._field == \"cpu_usage\")",
           "refId": "A"
         }
       ]
@@ -118,7 +384,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -135,7 +401,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r._field == \"memory_usage\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r._field == \"memory_usage\")",
           "refId": "A"
         }
       ]
@@ -160,7 +426,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -177,7 +443,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r._field == \"execution_time\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"clean_build\")\n  |> filter(fn: (r) => r._field == \"execution_time\")",
           "refId": "A"
         }
       ]
@@ -215,7 +481,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -232,7 +498,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r._field == \"cpu_usage\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r._field == \"cpu_usage\")",
           "refId": "A"
         }
       ]
@@ -257,7 +523,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -274,7 +540,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r._field == \"memory_usage\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r._field == \"memory_usage\")",
           "refId": "A"
         }
       ]
@@ -299,7 +565,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -316,7 +582,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r._field == \"execution_time\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"incremental_build\")\n  |> filter(fn: (r) => r._field == \"execution_time\")",
           "refId": "A"
         }
       ]
@@ -354,7 +620,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -371,7 +637,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r._field == \"cpu_usage\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r._field == \"cpu_usage\")",
           "refId": "A"
         }
       ]
@@ -396,7 +662,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -413,7 +679,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r._field == \"memory_usage\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r._field == \"memory_usage\")",
           "refId": "A"
         }
       ]
@@ -438,7 +704,7 @@
           "custom": {
             "lineWidth": 2,
             "fillOpacity": 10,
-            "showPoints": "auto",
+            "showPoints": "always",
             "pointSize": 5
           }
         },
@@ -455,7 +721,7 @@
       },
       "targets": [
         {
-          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r._field == \"execution_time\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)",
+          "query": "from(bucket: \"performance_lab\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance_metrics\")\n  |> filter(fn: (r) => r.application == \"xcode\")\n  |> filter(fn: (r) => r.workflow == \"run_unit_tests\")\n  |> filter(fn: (r) => r._field == \"execution_time\")",
           "refId": "A"
         }
       ]
@@ -580,7 +846,7 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-10m",
     "to": "now"
   },
   "title": "Xcode Performance",

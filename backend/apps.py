@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 
-STD_FRACTION = 0.10  # Standard deviation = 10% of the mean
+STD_FRACTION = 0.01  # Standard deviation = 1% of the mean
 
 
 @dataclass(frozen=True)

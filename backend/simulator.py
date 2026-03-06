@@ -1,16 +1,32 @@
 from __future__ import annotations
 
-import hashlib
-import uuid
+import subprocess
 
 import numpy as np
 
 from backend.apps import STD_FRACTION
 
 
-def generate_commit_id() -> str:
-    """Generate a short simulated commit hash."""
-    return hashlib.sha1(uuid.uuid4().bytes).hexdigest()[:8]
+def get_commit_id(repo_path: str | None = None) -> str:
+    """Get the real git commit short SHA for a repo.
+
+    Args:
+        repo_path: Path to the git repo. If None, uses the current directory.
+
+    Returns:
+        The short commit hash, or "unknown" if git is unavailable.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+            cwd=repo_path,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+    return "unknown"
 
 
 def simulate_metrics(

@@ -31,4 +31,5 @@ jobs:
           INFLUXDB_TOKEN: ${{ secrets.INFLUXDB_TOKEN }}
           INFLUXDB_ORG: ${{ secrets.INFLUXDB_ORG }}
           INFLUXDB_BUCKET: ${{ secrets.INFLUXDB_BUCKET }}
+          COMMIT_SHA: ${{ github.sha }}
         run: python run_benchmarks.py

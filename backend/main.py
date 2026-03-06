@@ -27,7 +27,7 @@ from backend.models import (
 )
 from backend.pipeline import run_app_pipeline
 from backend.regression import detect_regressions
-from backend.simulator import generate_commit_id, simulate_metrics
+from backend.simulator import get_commit_id, simulate_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +94,7 @@ def simulate(req: SimulateRequest) -> SimulateResponse:
             detail=f"Unknown workflow '{req.workflow}' for {req.application}",
         )
 
-    commit_id = generate_commit_id()
+    commit_id = get_commit_id()
     commit_number = get_commit_count(req.application, workflow=req.workflow) + 1
 
     metrics = simulate_metrics(

@@ -101,11 +101,15 @@ def get_repo_path(app_slug: str) -> Path:
     return get_repos_dir() / repo_name
 
 
-def commit_and_push(file_path: str, message: str, cwd: str | None = None) -> str:
-    """Stage a file, commit, and push to origin.
+def commit_and_push(
+    file_paths: str | list[str],
+    message: str,
+    cwd: str | None = None,
+) -> str:
+    """Stage file(s), commit, and push to origin.
 
     Args:
-        file_path: Path to the file to stage (relative to repo root).
+        file_paths: Path or list of paths to stage (relative to repo root).
         message: Commit message.
         cwd: Working directory (repo root). If None, uses performance_lab root.
 
@@ -115,7 +119,11 @@ def commit_and_push(file_path: str, message: str, cwd: str | None = None) -> str
     if cwd is None:
         cwd = str(get_performance_lab_root())
 
-    _run_git("add", file_path, cwd=cwd)
+    if isinstance(file_paths, str):
+        file_paths = [file_paths]
+
+    for fp in file_paths:
+        _run_git("add", fp, cwd=cwd)
 
     if not _has_staged_changes(cwd):
         raise GitError(

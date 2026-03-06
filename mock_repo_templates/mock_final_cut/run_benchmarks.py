@@ -10,11 +10,10 @@ Required environment variables:
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
+import subprocess
 import sys
-import uuid
 from datetime import datetime, timezone
 
 import numpy as np
@@ -47,8 +46,24 @@ def get_client(settings: dict[str, str]) -> InfluxDBClient:
     )
 
 
-def generate_commit_id() -> str:
-    return hashlib.sha1(uuid.uuid4().bytes).hexdigest()[:8]
+def get_commit_id() -> str:
+    """Get the real git commit short SHA.
+
+    Uses COMMIT_SHA env var (set by CI), falls back to git rev-parse.
+    """
+    sha = os.environ.get("COMMIT_SHA", "")
+    if sha:
+        return sha[:8]
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+    return "unknown"
 
 
 def simulate_metrics(cpu_mean: float, memory_mean: float, execution_time_mean: float) -> dict[str, float]:
@@ -201,9 +216,9 @@ def detect_regressions(
         new_value = new_values[metric]
         z_score = (new_value - baseline_mean) / baseline_std
 
-        if abs(z_score) > 3:
+        if z_score > 3:
             severity = "strong"
-        elif abs(z_score) > 2:
+        elif z_score > 2:
             severity = "possible"
         else:
             continue
@@ -249,7 +264,7 @@ def main() -> None:
 
     application = config["app"]
     workflows = config["workflows"]
-    commit_id = generate_commit_id()
+    commit_id = get_commit_id()
     has_regressions = False
 
     print(f"Running benchmarks for {application} (commit {commit_id})")

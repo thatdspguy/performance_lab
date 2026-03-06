@@ -48,7 +48,7 @@ def test_simulate_success(mock_count, mock_write, mock_detect):
     assert data["application"] == "final_cut"
     assert data["workflow"] == "importing_video"
     assert data["commit_number"] == 6
-    assert len(data["commit_id"]) == 8
+    assert len(data["commit_id"]) >= 7
     assert "cpu_usage" in data["metrics"]
     assert "memory_usage" in data["metrics"]
     assert "execution_time" in data["metrics"]

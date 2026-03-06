@@ -1,15 +1,10 @@
-from backend.simulator import generate_commit_id, simulate_metrics
+from backend.simulator import get_commit_id, simulate_metrics
 
 
-def test_generate_commit_id_length():
-    cid = generate_commit_id()
-    assert len(cid) == 8
-    assert all(c in "0123456789abcdef" for c in cid)
-
-
-def test_generate_commit_id_unique():
-    ids = {generate_commit_id() for _ in range(100)}
-    assert len(ids) == 100
+def test_get_commit_id_returns_string():
+    cid = get_commit_id()
+    assert isinstance(cid, str)
+    assert len(cid) > 0
 
 
 def test_simulate_metrics_keys():
