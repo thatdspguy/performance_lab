@@ -27,3 +27,9 @@ grafana-data/
 .idea/
 *.swp
 *.swo
+
+# Other
+demo
+video-script.md
+video-transcript.md
+qprompt

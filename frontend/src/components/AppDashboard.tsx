@@ -153,6 +153,9 @@ export default function AppDashboard({ app, grafanaUrl }: AppDashboardProps) {
           <RegressionTable regressions={regressions} />
         </CardContent>
       </Card>
+
+      {/* Spacer for scrolling in video recording */}
+      <Box sx={{ minHeight: '30vh' }} />
     </Box>
   );
 }

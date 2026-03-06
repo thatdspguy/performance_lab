@@ -63,7 +63,7 @@ trap cleanup EXIT INT TERM
 echo ""
 echo "Starting backend on http://localhost:8001 ..."
 cd "$ROOT"
-uv run uvicorn backend.main:app --reload --port 8001 &
+uv run uvicorn backend.main:app --reload --reload-dir backend --port 8001 &
 BACKEND_PID=$!
 
 # --- Start frontend ---
